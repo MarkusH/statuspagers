@@ -1,0 +1,11 @@
+backend = "github"
+
+components = [
+  "Component 1",
+  "Component 2",
+  "Component 3",
+]
+
+[github]
+  owner = "GitHub username or org name"
+  repository = "repo name"
