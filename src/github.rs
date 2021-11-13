@@ -1,14 +1,12 @@
+use chrono::prelude::*;
+use reqwest;
+use serde::{Deserialize, Deserializer};
 use serde_json;
 use std::collections::{HashMap, HashSet};
 use std::env;
 
-use chrono::prelude::*;
-use reqwest;
-use serde::{Deserialize, Deserializer};
-
-use crate::types::{
- Component,    ComponentStatus, Error, GraphQLRequest, Incident, IncidentUpdate, IssueProvider, Labels,
-};
+use crate::provider::{GraphQLRequest, IssueProvider, Labels};
+use crate::types::{Component, ComponentStatus, Error, Incident, IncidentUpdate};
 
 const LABEL_COMPONENT_PREFIX: &'static str = "component/";
 const LABEL_STATUS_PREFIX: &'static str = "status::";

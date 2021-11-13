@@ -6,11 +6,14 @@ use toml;
 
 mod config;
 mod github;
+mod provider;
 mod types;
+mod utils;
 
 use config::{Backend, Config};
 use github::GitHubIssueProvider;
-use types::{Component, IssueProvider};
+use provider::IssueProvider;
+use types::Component;
 
 fn main() {
     let config_string =
@@ -32,9 +35,18 @@ fn main() {
 
     let existing_labels = issue_provider.fetch_labels();
     let expected_labels = issue_provider.get_expected_labels(&components);
-    let missing_component_labels = expected_labels.components.difference(&existing_labels.components).collect::<Vec<&String>>();
-    let missing_status_labels = expected_labels.statuses.difference(&existing_labels.statuses).collect::<Vec<&String>>();
-    let obsolet_component_labels = existing_labels.components.difference(&expected_labels.components).collect::<Vec<&String>>();
+    let missing_component_labels = expected_labels
+        .components
+        .difference(&existing_labels.components)
+        .collect::<Vec<&String>>();
+    let missing_status_labels = expected_labels
+        .statuses
+        .difference(&existing_labels.statuses)
+        .collect::<Vec<&String>>();
+    let obsolet_component_labels = existing_labels
+        .components
+        .difference(&expected_labels.components)
+        .collect::<Vec<&String>>();
     if missing_component_labels.len() > 0 {
         eprintln!("Missing component labels:");
         for label in missing_component_labels {
