@@ -66,8 +66,7 @@ fn main() {
         }
     }
 
-    // Use globbing
-    let tera = match Tera::new("templates/**/*.html") {
+    let tera = match Tera::new(config.template_dir.to_str().unwrap()) {
         Ok(t) => t,
         Err(e) => {
             println!("Parsing error(s): {}", e);

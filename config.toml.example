@@ -1,4 +1,5 @@
 backend = "github"
+template_directory = "./templates"
 
 components = [
   "Component 1",
