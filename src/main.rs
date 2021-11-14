@@ -82,9 +82,11 @@ fn main() {
     for incident in open_incidents.iter() {
         incident.update_components(&mut components);
     }
+    let closed_incidents = issue_provider.get_closed_incidents();
 
     ctx.insert("components", &components);
     ctx.insert("open_incidents", &open_incidents);
+    ctx.insert("closed_incidents", &closed_incidents);
     let out = tera.render("index.html", &ctx).unwrap();
     println!("{}", out);
 }

@@ -1,6 +1,6 @@
 {%- extends "base.html" -%}
 {%- block content -%}
-    <div class="mt-10 border-2 divide-y-2 dark:border-gray-200 dark:divide-gray-200">
+    <div class="mt-10 border-2 rounded divide-y-2 dark:border-gray-200 dark:divide-gray-200">
         {%- for _, component in components -%}
             {%- if component.status == "Operational" -%}
                 {%- set css_border_color = "dark:border-green-500 dark:text-green-500" -%}
@@ -36,7 +36,7 @@
             {%- set css_border_color = "dark:border-gray-200 dark:divide-gray-200" -%}
             {%- set css_bg_color = "dark:bg-gray-200" -%}
         {%- endif -%}
-        <div class="mt-10 border-2 divide-y-2 {{ css_border_color }} flex flex-col">
+        <div class="mt-10 border-2 rounded divide-y-2 {{ css_border_color }} flex flex-col">
             <div class="flex-1 p-4 text-lg {{ css_bg_color }} dark:text-black">
                 <div class="h-8">{{ incident.title }}</div>
             </div>
@@ -47,6 +47,21 @@
                     <span class="block pt-2 italic text-right">{{ update.datetime | date(format="%Y-%m-%d %H:%M") }}</span>
                 </div>
                 {%- endfor -%}
+            </div>
+        </div>
+    {%- endfor -%}
+
+    <h1 class="mt-10 font-bold text-4xl">History</h1>
+    {%- for incident in closed_incidents -%}
+        <div class="mt-10 border-2 rounded divide-y-2 dark:border-gray-200 dark:divide-gray-200 flex flex-col">
+            <div class="flex-1 p-4 text-lg dark:bg-gray-200 dark:text-black">
+                <div class="h-8">{{ incident.title }}</div>
+            </div>
+            <div class="flex-1 px-4 divide-y-2">
+                <div class="py-4">
+                    {{ incident.updates[0].text | safe }}
+                    <span class="block pt-2 italic text-right">{{ incident.updates[0].datetime | date(format="%Y-%m-%d %H:%M") }}</span>
+                </div>
             </div>
         </div>
     {%- endfor -%}
