@@ -1,67 +1,53 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>Statuspagers</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.17/tailwind.min.css"
-        integrity="sha512-yXagpXH0ulYCN8G/Wl7GK+XIpdnkh5fGHM5rOzG8Kb9Is5Ua8nZWRx5/RaKypcbSHc56mQe0GBG0HQIGTmd8bw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.17/tailwind-dark.min.css"
-        integrity="sha512-Sx1NTVcv0oFnBPbgHhJdryxs5QULMAdUnPH3TIuOLzDf75rOfv3J55L6eHeA4/gQf5QT8wwvZFdZBlN7D0x71g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
-
-<body class="dark flex flex-col">
-    <div class="container max-w-screen-lg mt-10 mx-auto rounded border-2 divide-y-2 dark:border-gray-200 dark:divide-gray-200">
-        {%- for _, component in components %}
-            {% if component.status == "Operational" -%}
-                {% set css_border_color = "dark:border-green-500 dark:text-green-500" -%}
-                {% set status_string = "Operational" -%}
-            {% elif component.status == "PartialOutage" -%}
-                {% set css_border_color = "dark:border-yellow-400 dark:text-yellow-400" -%}
-                {% set status_string = "Partial Outage" -%}
-            {% elif component.status == "MajorOutage" -%}
-                {% set css_border_color = "dark:border-red-500 dark:text-red-500" -%}
-                {% set status_string = "Major Outage" -%}
-            {% else -%}
-                {% set css_border_color = "dark:border-gray-200 dark:text-gray-200" -%}
-                {% set status_string = "Unknown" -%}
-            {% endif -%}
+{%- extends "base.html" -%}
+{%- block content -%}
+    <div class="mt-10 border-2 divide-y-2 dark:border-gray-200 dark:divide-gray-200">
+        {%- for _, component in components -%}
+            {%- if component.status == "Operational" -%}
+                {%- set css_border_color = "dark:border-green-500 dark:text-green-500" -%}
+                {%- set status_string = "Operational" -%}
+            {%- elif component.status == "PartialOutage" -%}
+                {%- set css_border_color = "dark:border-yellow-400 dark:text-yellow-400" -%}
+                {%- set status_string = "Partial Outage" -%}
+            {%- elif component.status == "MajorOutage" -%}
+                {%- set css_border_color = "dark:border-red-500 dark:text-red-500" -%}
+                {%- set status_string = "Major Outage" -%}
+            {%- else -%}
+                {%- set css_border_color = "dark:border-gray-200 dark:text-gray-200" -%}
+                {%- set status_string = "Unknown" -%}
+            {%- endif -%}
             <div class="flex flex-row hover:shadow items-center h-20 px-4">
                 <div class="flex-1 h-8 text-lg">{{ component.name }}</div>
-                <div class="flex-none h-8 shadow border-2 rounded-full px-4 font-bold {{ css_border_color }}">
-                    {{ status_string }}</div>
+                <div class="flex-none h-8 shadow border-2 rounded-full px-4 font-bold {{ css_border_color }}">{{ status_string }}</div>
             </div>
-        {%- endfor %}
+        {%- endfor -%}
     </div>
-    {%- for incident in open_incidents %}
-        {% if incident.severity == "Operational" -%}
-            {% set css_border_color = "dark:border-green-500 dark:divide-green-500" -%}
-            {% set css_bg_color = "dark:bg-green-500" -%}
-        {% elif incident.severity == "PartialOutage" -%}
-            {% set css_border_color = "dark:border-yellow-400 dark:divide-yellow-400" -%}
-            {% set css_bg_color = "dark:bg-yellow-400" -%}
-        {% elif incident.severity == "MajorOutage" -%}
-            {% set css_border_color = "dark:border-red-500 dark:divide-red-500" -%}
-            {% set css_bg_color = "dark:bg-red-500" -%}
-        {% else -%}
-            {% set css_border_color = "dark:border-gray-200 dark:divide-gray-200" -%}
-            {% set css_bg_color = "dark:bg-gray-200" -%}
-        {% endif -%}
-        <div class="container max-w-screen-lg mt-10 mx-auto rounded border-2 divide-y-2 {{ css_border_color }} flex flex-col">
+
+    {%- for incident in open_incidents -%}
+        {%- if incident.severity == "Operational" -%}
+            {%- set css_border_color = "dark:border-green-500 dark:divide-green-500" -%}
+            {%- set css_bg_color = "dark:bg-green-500" -%}
+        {%- elif incident.severity == "PartialOutage" -%}
+            {%- set css_border_color = "dark:border-yellow-400 dark:divide-yellow-400" -%}
+            {%- set css_bg_color = "dark:bg-yellow-400" -%}
+        {%- elif incident.severity == "MajorOutage" -%}
+            {%- set css_border_color = "dark:border-red-500 dark:divide-red-500" -%}
+            {%- set css_bg_color = "dark:bg-red-500" -%}
+        {%- else -%}
+            {%- set css_border_color = "dark:border-gray-200 dark:divide-gray-200" -%}
+            {%- set css_bg_color = "dark:bg-gray-200" -%}
+        {%- endif -%}
+        <div class="mt-10 border-2 divide-y-2 {{ css_border_color }} flex flex-col">
             <div class="flex-1 p-4 text-lg {{ css_bg_color }} dark:text-black">
                 <div class="h-8">{{ incident.title }}</div>
             </div>
             <div class="flex-1 px-4 divide-y-2">
-                {% for update in incident.updates -%}
+                {%- for update in incident.updates -%}
                 <div class="py-4">
                     {{ update.text | safe }}
                     <span class="block pt-2 italic text-right">{{ update.datetime | date(format="%Y-%m-%d %H:%M") }}</span>
                 </div>
-                {% endfor -%}
+                {%- endfor -%}
             </div>
         </div>
-    {%- endfor %}
-</body>
-
-</html>
+    {%- endfor -%}
+{%- endblock -%}
