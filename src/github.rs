@@ -42,6 +42,7 @@ struct GQLIncident {
     comments: GQLCommentNode,
     #[serde(rename = "createdAt", deserialize_with = "parse_datetime")]
     created_at: DateTime<Utc>,
+    id: String,
     labels: GQLLabelNode,
     title: String,
 }
@@ -154,6 +155,7 @@ impl IssueProvider for GitHubIssueProvider {
             }
             let incident = Incident::new_open(
                 component_names,
+                open_incident.id.clone(),
                 open_incident.created_at,
                 self.get_status(&open_incident.labels.nodes),
                 open_incident.title.clone(),
@@ -180,6 +182,7 @@ impl IssueProvider for GitHubIssueProvider {
             updates.reverse();
             let incident = Incident::new_closed(
                 closed_incident.closed_at,
+                closed_incident.id.clone(),
                 closed_incident.created_at,
                 self.get_status(&closed_incident.labels.nodes),
                 closed_incident.title.clone(),
@@ -215,6 +218,7 @@ impl IssueProvider for GitHubIssueProvider {
                         }
                       }
                       createdAt
+                      id
                       labels(first: 10) {
                         nodes {
                           name
@@ -234,6 +238,7 @@ impl IssueProvider for GitHubIssueProvider {
                         }
                       }
                       createdAt
+                      id
                       labels(first: 10) {
                         nodes {
                           name

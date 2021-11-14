@@ -1,0 +1,35 @@
+{%- extends "base.html" -%}
+
+{%- block content -%}
+    <div class="mt-10 flex flex-col">
+        <div class="text-gray-500">
+            <a href="./index.html">« back</a>
+        </div>
+    </div>
+    {%- if incident.severity == "Operational" -%}
+        {%- set css_border_color = "dark:border-green-500 dark:divide-green-500" -%}
+        {%- set css_bg_color = "dark:bg-green-500" -%}
+    {%- elif incident.severity == "PartialOutage" -%}
+        {%- set css_border_color = "dark:border-yellow-400 dark:divide-yellow-400" -%}
+        {%- set css_bg_color = "dark:bg-yellow-400" -%}
+    {%- elif incident.severity == "MajorOutage" -%}
+        {%- set css_border_color = "dark:border-red-500 dark:divide-red-500" -%}
+        {%- set css_bg_color = "dark:bg-red-500" -%}
+    {%- else -%}
+        {%- set css_border_color = "dark:border-gray-200 dark:divide-gray-200" -%}
+        {%- set css_bg_color = "dark:bg-gray-200" -%}
+    {%- endif -%}
+    <div class="mt-10 border-2 rounded divide-y-2 {{ css_border_color }} flex flex-col">
+        <div class="flex-1 p-4 text-lg {{ css_bg_color }} dark:text-black">
+            <div class="h-8">{{ incident.title }}</div>
+        </div>
+        <div class="flex-1 px-4 divide-y-2">
+            {%- for update in incident.updates -%}
+            <div class="py-4">
+                {{ update.text | safe }}
+                <span class="block pt-2 italic text-right">{{ update.datetime | date(format="%Y-%m-%d %H:%M") }}</span>
+            </div>
+            {%- endfor -%}
+        </div>
+    </div>
+{%- endblock -%}

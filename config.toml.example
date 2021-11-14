@@ -1,4 +1,5 @@
 backend = "github"
+output_directory = "./html"
 template_directory = "./templates"
 
 components = [

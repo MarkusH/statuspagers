@@ -1,6 +1,7 @@
 use slug::slugify;
 use std::collections::HashMap;
 use std::fs;
+use std::path::PathBuf;
 use tera::{Context, Tera};
 use toml;
 
@@ -9,11 +10,13 @@ mod github;
 mod provider;
 mod types;
 mod utils;
+mod writer;
 
 use config::{Backend, Config};
 use github::GitHubIssueProvider;
 use provider::IssueProvider;
-use types::Component;
+use types::{Component, Incident};
+use writer::render;
 
 fn main() {
     let config_string =
@@ -73,7 +76,6 @@ fn main() {
             ::std::process::exit(1);
         }
     };
-    let mut ctx = Context::new();
 
     issue_provider.fetch_incidents().unwrap();
 
@@ -83,9 +85,45 @@ fn main() {
     }
     let closed_incidents = issue_provider.get_closed_incidents();
 
+    render_index(
+        &tera,
+        &components,
+        &open_incidents,
+        &closed_incidents,
+        config.output_dir.join("index.html"),
+    );
+    for incident in open_incidents.iter() {
+        render_incident(
+            &tera,
+            &incident,
+            config.output_dir.join(format!("{}.html", incident.id)),
+        );
+    }
+    for incident in closed_incidents.iter() {
+        render_incident(
+            &tera,
+            &incident,
+            config.output_dir.join(format!("{}.html", incident.id)),
+        );
+    }
+}
+
+fn render_index(
+    tera: &Tera,
+    components: &HashMap<String, Component>,
+    open: &Vec<Incident>,
+    closed: &Vec<Incident>,
+    output: PathBuf,
+) {
+    let mut ctx = Context::new();
     ctx.insert("components", &components);
-    ctx.insert("open_incidents", &open_incidents);
-    ctx.insert("closed_incidents", &closed_incidents);
-    let out = tera.render("index.html", &ctx).unwrap();
-    println!("{}", out);
+    ctx.insert("open_incidents", &open);
+    ctx.insert("closed_incidents", &closed);
+    render(&tera, &ctx, "index.html", output);
+}
+
+fn render_incident(tera: &Tera, incident: &Incident, output: PathBuf) {
+    let mut ctx = Context::new();
+    ctx.insert("incident", &incident);
+    render(&tera, &ctx, "detail.html", output);
 }

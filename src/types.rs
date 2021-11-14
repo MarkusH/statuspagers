@@ -78,6 +78,7 @@ pub struct Incident {
     #[serde(serialize_with = "to_seconds_optional")]
     closed: Option<DateTime<Utc>>,
     component_names: Option<Vec<String>>,
+    pub id: String,
     #[serde(serialize_with = "to_seconds")]
     opened: DateTime<Utc>,
     severity: ComponentStatus,
@@ -89,6 +90,7 @@ pub struct Incident {
 impl Incident {
     pub fn new_open(
         component_names: Vec<String>,
+        id: String,
         opened: DateTime<Utc>,
         severity: ComponentStatus,
         title: String,
@@ -97,6 +99,7 @@ impl Incident {
         Incident {
             closed: None,
             component_names: Some(component_names),
+            id,
             opened,
             severity,
             status: IncidentStatus::Open,
@@ -106,6 +109,7 @@ impl Incident {
     }
     pub fn new_closed(
         closed: Option<DateTime<Utc>>,
+        id: String,
         opened: DateTime<Utc>,
         severity: ComponentStatus,
         title: String,
@@ -114,6 +118,7 @@ impl Incident {
         Incident {
             closed,
             component_names: None,
+            id,
             opened,
             severity,
             status: IncidentStatus::Closed,
