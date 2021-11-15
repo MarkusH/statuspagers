@@ -23,10 +23,15 @@ pub struct Config {
     pub github: Option<GitHub>,
     #[serde(
         rename(deserialize = "output_directory"),
-        deserialize_with = "deserialize_output_dir",
+        deserialize_with = "deserialize_dir",
         default = "default_output_dir"
     )]
     pub output_dir: PathBuf,
+    #[serde(
+        rename(deserialize = "static_directory"),
+        deserialize_with = "deserialize_dir"
+    )]
+    pub static_dir: PathBuf,
     #[serde(
         rename(deserialize = "template_directory"),
         deserialize_with = "deserialize_template_dir",
@@ -46,7 +51,7 @@ fn default_output_dir() -> PathBuf {
     buf.canonicalize().unwrap()
 }
 
-fn deserialize_output_dir<'de, D>(deserializer: D) -> Result<PathBuf, D::Error>
+fn deserialize_dir<'de, D>(deserializer: D) -> Result<PathBuf, D::Error>
 where
     D: Deserializer<'de>,
 {
@@ -79,15 +84,5 @@ fn deserialize_template_dir<'de, D>(deserializer: D) -> Result<PathBuf, D::Error
 where
     D: Deserializer<'de>,
 {
-    let mut buf = PathBuf::deserialize(deserializer)?;
-    if buf.is_relative() {
-        buf = current_dir().unwrap().join(buf);
-    }
-    if !buf.exists() {
-        eprintln!("Path {:?} does not exist.", buf);
-    }
-    if !buf.is_dir() {
-        eprintln!("Path {:?} is not a directory.", buf);
-    }
-    Ok(buf.canonicalize().unwrap().join("**"))
+    Ok(deserialize_dir(deserializer).unwrap().join("**"))
 }

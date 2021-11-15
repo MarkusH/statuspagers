@@ -1,5 +1,6 @@
 backend = "github"
 output_directory = "./html"
+static_directory = "/usr/share/statuspagers/static"
 template_directory = "./templates"
 
 components = [

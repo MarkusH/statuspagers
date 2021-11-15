@@ -16,7 +16,7 @@ use config::{Backend, Config};
 use github::GitHubIssueProvider;
 use provider::IssueProvider;
 use types::{Component, Incident};
-use writer::render;
+use writer::{copy_dir, render};
 
 fn main() {
     let config_string =
@@ -106,6 +106,7 @@ fn main() {
             config.output_dir.join(format!("{}.html", incident.id)),
         );
     }
+    copy_dir(&config.static_dir, &config.output_dir.join("static")).unwrap();
 }
 
 fn render_index(
