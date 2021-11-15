@@ -2,28 +2,28 @@
 
 {%- block content -%}
     <div class="mt-10 flex flex-col">
-        <div class="text-gray-500">
+        <div class="text-gray-500 dark:text-gray-200">
             <a href="./index.html">« back</a>
         </div>
     </div>
     {%- if incident.severity == "Operational" -%}
-        {%- set css_border_color = "dark:border-green-500 dark:divide-green-500" -%}
-        {%- set css_bg_color = "dark:bg-green-500" -%}
+        {%- set css_border_color = "border-green divide-green" -%}
+        {%- set css_bg_color = "bg-green" -%}
     {%- elif incident.severity == "PartialOutage" -%}
-        {%- set css_border_color = "dark:border-yellow-400 dark:divide-yellow-400" -%}
-        {%- set css_bg_color = "dark:bg-yellow-400" -%}
+        {%- set css_border_color = "border-yellow divide-yellow" -%}
+        {%- set css_bg_color = "bg-yellow" -%}
     {%- elif incident.severity == "MajorOutage" -%}
-        {%- set css_border_color = "dark:border-red-500 dark:divide-red-500" -%}
-        {%- set css_bg_color = "dark:bg-red-500" -%}
+        {%- set css_border_color = "border-red divide-red" -%}
+        {%- set css_bg_color = "bg-red" -%}
     {%- else -%}
-        {%- set css_border_color = "dark:border-gray-200 dark:divide-gray-200" -%}
-        {%- set css_bg_color = "dark:bg-gray-200" -%}
+        {%- set css_border_color = "border-gray-200 divide-gray-200" -%}
+        {%- set css_bg_color = "bg-gray-200" -%}
     {%- endif -%}
     <div class="mt-10 border-2 rounded divide-y-2 {{ css_border_color }} flex flex-col">
-        <div class="flex-1 p-4 text-lg {{ css_bg_color }} dark:text-black">
+        <div class="flex-1 p-4 text-lg {{ css_bg_color }} text-black">
             <div class="h-8">{{ incident.title }}</div>
         </div>
-        <div class="flex-1 px-4 divide-y-2">
+        <div class="flex-1 px-4 divide-y-2 divide-gray-200">
             {%- for update in incident.updates -%}
             <div class="py-4">
                 {{ update.text | safe }}

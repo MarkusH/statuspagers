@@ -1,47 +1,47 @@
 {%- extends "base.html" -%}
 
 {%- block content -%}
-    <div class="mt-10 border-2 rounded divide-y-2 dark:border-gray-200 dark:divide-gray-200">
+    <div class="mt-10 border-2 rounded divide-y-2 border-gray-200 divide-gray-200">
         {%- for _, component in components -%}
             {%- if component.status == "Operational" -%}
-                {%- set css_border_color = "dark:border-green-500 dark:text-green-500" -%}
+                {%- set css_border_color = "border-green text-green" -%}
                 {%- set status_string = "Operational" -%}
             {%- elif component.status == "PartialOutage" -%}
-                {%- set css_border_color = "dark:border-yellow-400 dark:text-yellow-400" -%}
+                {%- set css_border_color = "border-yellow text-yellow" -%}
                 {%- set status_string = "Partial Outage" -%}
             {%- elif component.status == "MajorOutage" -%}
-                {%- set css_border_color = "dark:border-red-500 dark:text-red-500" -%}
+                {%- set css_border_color = "border-red text-red" -%}
                 {%- set status_string = "Major Outage" -%}
             {%- else -%}
-                {%- set css_border_color = "dark:border-gray-200 dark:text-gray-200" -%}
+                {%- set css_border_color = "border-gray-200 text-gray-200" -%}
                 {%- set status_string = "Unknown" -%}
             {%- endif -%}
-            <div class="flex flex-row hover:shadow items-center h-20 px-4">
+            <div class="flex flex-row items-center h-20 px-4">
                 <div class="flex-1 h-8 text-lg">{{ component.name }}</div>
-                <div class="flex-none h-8 shadow border-2 rounded-full px-4 font-bold {{ css_border_color }}">{{ status_string }}</div>
+                <div class="flex-none h-8 border-2 rounded-full px-4 font-bold {{ css_border_color }}">{{ status_string }}</div>
             </div>
         {%- endfor -%}
     </div>
 
     {%- for incident in open_incidents -%}
         {%- if incident.severity == "Operational" -%}
-            {%- set css_border_color = "dark:border-green-500 dark:divide-green-500" -%}
-            {%- set css_bg_color = "dark:bg-green-500" -%}
+            {%- set css_border_color = "border-green divide-green" -%}
+            {%- set css_bg_color = "bg-green" -%}
         {%- elif incident.severity == "PartialOutage" -%}
-            {%- set css_border_color = "dark:border-yellow-400 dark:divide-yellow-400" -%}
-            {%- set css_bg_color = "dark:bg-yellow-400" -%}
+            {%- set css_border_color = "border-yellow divide-yellow" -%}
+            {%- set css_bg_color = "bg-yellow" -%}
         {%- elif incident.severity == "MajorOutage" -%}
-            {%- set css_border_color = "dark:border-red-500 dark:divide-red-500" -%}
-            {%- set css_bg_color = "dark:bg-red-500" -%}
+            {%- set css_border_color = "border-red divide-red" -%}
+            {%- set css_bg_color = "bg-red" -%}
         {%- else -%}
-            {%- set css_border_color = "dark:border-gray-200 dark:divide-gray-200" -%}
-            {%- set css_bg_color = "dark:bg-gray-200" -%}
+            {%- set css_border_color = "border-gray-200 divide-gray-200" -%}
+            {%- set css_bg_color = "bg-gray-200" -%}
         {%- endif -%}
         <div class="mt-10 border-2 rounded divide-y-2 {{ css_border_color }} flex flex-col">
-            <div class="flex-1 p-4 text-lg {{ css_bg_color }} dark:text-black">
+            <div class="flex-1 p-4 text-lg {{ css_bg_color }} text-black">
                 <div class="h-8"><a href="./{{ incident.id }}.html">{{ incident.title }}</a></div>
             </div>
-            <div class="flex-1 px-4 divide-y-2">
+            <div class="flex-1 px-4 divide-y-2 divide-gray-200">
                 {%- for update in incident.updates -%}
                 <div class="py-4">
                     {{ update.text | safe }}
@@ -54,11 +54,11 @@
 
     <h1 class="mt-10 font-bold text-4xl">History</h1>
     {%- for incident in closed_incidents -%}
-        <div class="mt-10 border-2 rounded divide-y-2 dark:border-gray-200 dark:divide-gray-200 flex flex-col">
-            <div class="flex-1 p-4 text-lg dark:bg-gray-200 dark:text-black">
+        <div class="mt-10 border-2 rounded divide-y-2 border-gray-200 divide-gray-200 flex flex-col">
+            <div class="flex-1 p-4 text-lg bg-gray-200 text-black">
                 <div class="h-8"><a href="./{{ incident.id }}.html">{{ incident.title }}</a></div>
             </div>
-            <div class="flex-1 px-4 divide-y-2">
+            <div class="flex-1 px-4 divide-y-2 divide-gray-200">
                 <div class="py-4">
                     {{ incident.updates[0].text | safe }}
                     <span class="block pt-2 italic text-right">{{ incident.updates[0].datetime | date(format="%Y-%m-%d %H:%M") }}</span>

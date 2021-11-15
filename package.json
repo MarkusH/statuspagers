@@ -1,0 +1,17 @@
+{
+  "name": "statuspagers",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+    "compile-css": "npx tailwindcss --config tailwind.config.js --input css/tailwind.css --output dist/tailwind.css && npx tailwindcss --config tailwind.config.js --minify --input css/tailwind.css --output dist/tailwind.min.css"
+  },
+  "author": "Markus Holtermann",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MarkusH/statuspagers/issues"
+  },
+  "homepage": "https://github.com/MarkusH/statuspagers#readme",
+  "devDependencies": {
+    "tailwindcss": "^2.2.19"
+  }
+}
